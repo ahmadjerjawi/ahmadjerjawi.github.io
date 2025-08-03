@@ -1,204 +1,275 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ahmad Jerjawi (Arkipon) | Developer & Privacy Advocate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --dark-bg: #101010;
+            --light-text: #e0e0e0;
+            --accent-glow: #00ff99;
+            --accent-secondary: #ff0066;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --spinner-color: var(--accent-glow);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
-            font-family: 'Courier New', monospace;
-            background-color: #1e1e1e;
-            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
             margin: 0;
             padding: 0;
+            background-image: radial-gradient(
+                circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(0, 255, 153, 0.1),
+                rgba(0, 255, 153, 0) 30%
+            );
+            transition: background 0.2s;
         }
 
-        header {
-            background-color: #333;
-            padding: 20px;
-            text-align: center;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        header, .about, .projects, footer { padding: 80px 0; text-align: center; }
+        header { padding-top: 120px; }
 
         header h1 {
+            font-weight: 900;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            background: linear-gradient(90deg, var(--light-text), #aaa);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
             margin: 0;
-            font-size: 2.5rem;
+            cursor: pointer; /* Indicates it's interactive */
         }
 
         header p {
-            font-size: 1.2rem;
-            color: #00ff99;
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            color: var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
         }
 
-        .about {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            text-align: center;
+        h2 {
+            font-size: 2.5rem; margin-bottom: 40px; position: relative; display: inline-block;
+        }
+        h2::after {
+            content: ''; position: absolute; bottom: -10px; left: 50%;
+            transform: translateX(-50%); width: 50px; height: 3px;
+            background-color: var(--accent-glow); border-radius: 2px;
         }
 
-        .about h2 {
-            font-size: 2rem;
-            color: #ff0066;
-        }
-
-        .about p {
-            font-size: 1.1rem;
-        }
-
-        .projects {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .projects h2 {
-            font-size: 2rem;
-            color: #00ff99;
-        }
+        .about p { font-size: 1.1rem; line-height: 1.7; max-width: 650px; margin: 0 auto; color: #b0b0b0; }
 
         .project-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            min-height: 200px;
         }
 
         .project-item {
-            background-color: #333;
-            padding: 15px;
-            width: 300px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
+            padding: 25px; text-align: left;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex; flex-direction: column;
         }
-
         .project-item:hover {
-            background-color: #444;
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.3);
         }
-
-        .project-item h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .project-item p {
-            font-size: 1rem;
-        }
+        .project-item h3 { font-size: 1.4rem; margin-bottom: 10px; color: white; }
+        .project-item p { font-size: 1rem; line-height: 1.6; color: #b0b0b0; flex-grow: 1; margin-bottom: 20px; }
+        .project-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
 
         a.btn {
-            display: inline-block;
-            background-color: #00ff99;
-            color: #1e1e1e;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-top: 10px;
-            transition: background-color 0.3s;
+            display: inline-block; background: linear-gradient(45deg, var(--accent-glow), #00b36b);
+            color: #000; font-weight: 500; padding: 10px 18px; border-radius: 8px;
+            text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease; border: none;
         }
+        a.btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 255, 153, 0.2); color: #000; }
 
-        a.btn:hover {
-            background-color: #ff0066;
-            color: #ffffff;
-        }
-
-        footer {
-            background-color: #333;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-        }
-
+        footer { border-top: 1px solid var(--card-border); color: #888; }
         footer a {
-            color: #00ff99;
-            text-decoration: none;
-            margin: 0 10px;
+            color: var(--light-text); text-decoration: none; margin: 0 10px;
+            font-weight: 500; position: relative; transition: color 0.3s ease;
+        }
+        footer a:hover { color: var(--accent-glow); }
+        footer a::after {
+            content: ''; position: absolute; width: 100%; height: 1px;
+            background: var(--accent-glow); bottom: -3px; left: 0;
+            transform: scaleX(0); transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        footer a:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+        
+        .hit-counter {
+            margin-top: 30px;
+        }
+        .hit-counter img {
+            border: 0;
         }
 
-        footer a:hover {
-            color: #ff0066;
+        .hidden { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .visible { opacity: 1; transform: translateY(0); }
+        .loader {
+            width: 50px; height: 50px; border: 5px solid var(--card-border);
+            border-top-color: var(--spinner-color); border-radius: 50%;
+            animation: spin 1s linear infinite; margin: 40px auto;
         }
+        .error-message { color: var(--accent-secondary); font-size: 1.1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-	<header>
-    <h1 data-value="Ahmed Jerjawi (Arkipon)">Ahmed Jerjawi (Arkipon)</h1>
-    <p>Privacy-Obsessed Developer | Open-Source Enthusiast</p>
-	</header>
-
-
-    <section class="about">
-        <h2>About Me</h2>
-        <p>I'm a developer focused on privacy, open-source projects, and Linux systems. With a deep love for customizing environments and building from scratch, I use tools like Artix, LFS, and Docker to create highly efficient setups. Currently working on various open-source projects aimed at enhancing privacy and security.</p>
-    </section>
-
-    <section class="projects">
-        <h2>Projects</h2>
-        <div class="project-list" id="project-list">
-            <!-- Dynamic GitHub Projects will load here -->
+    <header>
+        <div class="container">
+            <h1 data-value="Ahmad Jerjawi (Arkipon)">Ahmad Jerjawi (Arkipon)</h1>
+            <p>Privacy-Obsessed Developer | Open-Source Enthusiast</p>
         </div>
-    </section>
-
+    </header>
+    <main>
+        <section class="about hidden">
+            <div class="container">
+                <h2>About Me</h2>
+                <p>I'm a developer focused on privacy, open-source projects, and Linux systems. With a deep love for customizing environments and building from scratch, I use tools like Artix, LFS, and Docker to create highly efficient setups. Currently working on various open-source projects aimed at enhancing privacy and security.</p>
+            </div>
+        </section>
+        <section class="projects">
+            <div class="container">
+                <h2 class="hidden">Projects</h2>
+                <div class="project-list" id="project-list">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </section>
+    </main>
     <footer>
-        <p>Find me on <a href="https://github.com/ahmadjerjawi" target="_blank">GitHub</a> | <a href="https://x.com/Ahmadjerjawi">Twitter</a> </p>
+        <div class="container">
+            <p>Find me on <a href="https://github.com/ahmadjerjawi" target="_blank">GitHub</a> | <a href="https://x.com/Ahmadjerjawi">Twitter</a></p>
+            <div class="hit-counter">
+                <!-- hitwebcounter Code START -->
+                <a href="https://www.hitwebcounter.com" target="_blank" rel="noopener noreferrer">
+                    <img src="https://hitwebcounter.com/counter/counter.php?page=21306319&style=0038&nbdigits=5&type=ip&initCount=0" title="Counter Widget" alt="Visit counter For Websites">
+                </a>
+                <!-- hitwebcounter Code END -->
+            </div>
+        </div>
     </footer>
-
-<div align='center'><a href='https://www.free-website-hit-counter.com'><img src='https://www.free-website-hit-counter.com/c.php?d=9&id=178195&s=1' border='0' alt='Free Website Hit Counter'></a><br / ><small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">How much people visited my website :3</a></small></div>
-
-
-
-
-
     <script>
-        // GitHub API to load your repositories dynamically
-        fetch('https://api.github.com/users/ahmadjerjawi/repos')
-        .then(response => response.json())
-        .then(data => {
-            const projectList = document.getElementById('project-list');
-            data.forEach(repo => {
-                const projectItem = document.createElement('div');
-                projectItem.classList.add('project-item');
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- EFFECT 1: Mouse Follow Spotlight ---
+        document.body.addEventListener('mousemove', e => {
+            document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+            document.documentElement.style.setProperty('--mouse-y', (e.clientY + window.scrollY) + 'px');
+        });
 
-                // Create buttons for GitHub and Homepage if available
-                const homepageButton = repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="btn">Visit Homepage</a>` : '';
-
-                projectItem.innerHTML = `
-                    <h3>${repo.name}</h3>
-                    <p>${repo.description ? repo.description : 'No description available.'}</p>
-                    <a href="${repo.html_url}" target="_blank" class="btn">View on GitHub</a>
-                    ${homepageButton}
-                `;
-                projectList.appendChild(projectItem);
-            });
-        })
-        .catch(error => console.error('Error fetching repos:', error));
-
-        // Randomized letters effect on hover for header name
+        // --- EFFECT 2: Hover-activated Text Scramble (FIXED) ---
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let interval = null;
+        
+        // Select the container (<header>) and the element to animate (<h1>)
+        const header = document.querySelector("header");
+        const h1 = header.querySelector("h1");
 
-        document.querySelector("h1").onmouseover = event => {
+        // Use 'mouseenter' on the container to prevent re-triggering on child elements
+        header.addEventListener('mouseenter', () => {
             let iteration = 0;
-            clearInterval(interval);
+            clearInterval(interval); // Clear any previous, unfinished interval
 
             interval = setInterval(() => {
-                event.target.innerText = event.target.innerText
+                // IMPORTANT: Use the 'h1' variable directly, not event.target
+                h1.innerText = h1.dataset.value
                     .split("")
                     .map((letter, index) => {
                         if (index < iteration) {
-                            return event.target.dataset.value[index];
+                            return h1.dataset.value[index];
                         }
                         return letters[Math.floor(Math.random() * 26)];
                     })
                     .join("");
 
-                if (iteration >= event.target.dataset.value.length) {
+                if (iteration >= h1.dataset.value.length) {
                     clearInterval(interval);
                 }
 
-                iteration += 1 / 3;
+                iteration += 1 / 2;
             }, 30);
-        }
+        });
+
+        // --- EFFECT 3: Scroll-in Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const staticHiddenElements = document.querySelectorAll('.hidden');
+        staticHiddenElements.forEach(el => observer.observe(el));
+
+        // --- DYNAMIC CONTENT & SECURITY: GitHub API Fetch ---
+        const projectList = document.getElementById('project-list');
+        fetch('https://api.github.com/users/ahmadjerjawi/repos?sort=updated&per_page=9')
+            .then(response => {
+                if (!response.ok) { throw new Error(`Network response was not ok: ${response.statusText}`); }
+                return response.json();
+            })
+            .then(data => {
+                projectList.innerHTML = ''; // Clear the loader
+                data.forEach(repo => {
+                    if (repo.name === 'ahmadjerjawi') return;
+                    
+                    const projectItem = document.createElement('div');
+                    projectItem.classList.add('project-item', 'hidden');
+
+                    const title = document.createElement('h3');
+                    title.textContent = repo.name;
+
+                    const description = document.createElement('p');
+                    description.textContent = repo.description || 'No description available.';
+
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.className = 'project-buttons';
+
+                    const githubBtn = document.createElement('a');
+                    githubBtn.href = repo.html_url;
+                    githubBtn.target = '_blank';
+                    githubBtn.className = 'btn';
+                    githubBtn.textContent = 'View repo';
+                    buttonContainer.appendChild(githubBtn);
+
+                    if (repo.homepage) {
+                        const homepageBtn = document.createElement('a');
+                        homepageBtn.href = repo.homepage;
+                        homepageBtn.target = '_blank';
+                        homepageBtn.className = 'btn';
+                        homepageBtn.textContent = 'Visit Page';
+                        buttonContainer.appendChild(homepageBtn);
+                    }
+                    
+                    projectItem.appendChild(title);
+                    projectItem.appendChild(description);
+                    projectItem.appendChild(buttonContainer);
+                    projectList.appendChild(projectItem);
+                    
+                    observer.observe(projectItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching repos:', error);
+                projectList.innerHTML = `<p class="error-message">Could not fetch projects from GitHub. Please check the console for details.</p>`;
+            });
+    });
     </script>
 </body>
 </html>
